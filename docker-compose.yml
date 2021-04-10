@@ -1,0 +1,52 @@
+version: '3'
+services:
+  jenkins-docker:
+    container_name: jenkins-docker
+    user: "${UID}:${GID}"
+    build:
+      context: pipeline
+    ports:
+      - "8080:8080"
+      #- "50000:5000"
+    #create volume using the 'jenkins_home' folder on the host machine. Map it to container volume /var/jenkins_home
+    volumes: 
+      - "$PWD/jenkins_home:/var/jenkins_home"
+      #map the var/run/docker.sock OUTSIDE of the container to the one INSIDE the container
+      - "/var/run/docker.sock:/var/run/docker.sock"
+
+    # environment:
+    #   - CASC_JENKINS_CONFIG=/var/jenkins_conf/casc.yml
+    #use network created below
+    networks:
+      - net
+
+  #create a remote-host service for ssh 
+  remote_host_pipeline: 
+    container_name: remote-host-pipeline
+    image: remote-host-pipeline
+    build:
+      context: centos
+
+    #allow connection between jenkins and remote_host containers
+    networks:
+      - net
+
+  #gitlab server
+#  git: 
+#    container_name: git-server
+#    image: 'gitlab/gitlab-ce:latest'
+#    hostname: 'gitlab.example.com'
+#    ports:
+#      - '8090:80'
+#    volumes: 
+#      - '/srv/gitlab/config:/etc/gitlab'
+#      - '/srv/gitlab/logs:/var/log/gitlab'
+#      - '/srv/gitlab/data:/var/opt/gitlab'
+#    networks:
+#      - net
+
+#create a network
+networks:
+  net:
+
+

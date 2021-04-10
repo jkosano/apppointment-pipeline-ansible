@@ -1,0 +1,26 @@
+---
+jenkins:
+  securityRealm:
+    local:
+      allowsSignup: false
+      users:
+      #  - id: ${JENKINS_ADMIN_ID}
+      #    password: ${JENKINS_ADMIN_PASSWORD}
+       - id: admin
+         password: admin
+  # authorizationStrategy:
+  #   globalMatrix:
+  #     permissions:
+  #       - "Overall/Administer:admin"
+  #       - "Overall/Read:authenticated"
+
+  authorizationStrategy: loggedInUsersCanDoAnything
+
+jobs:
+  - file: /usr/local/seedjobtest.groovy
+  - file: /usr/local/seedjob.groovy
+
+
+unclassified:
+  location:
+    url: 192.168.1.32:8080/

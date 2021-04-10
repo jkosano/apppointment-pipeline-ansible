@@ -1,0 +1,79 @@
+pipeline {
+    agent any 
+
+    // environment {
+    //     // DOCKER_ID=credentials('DOCKER_ID')
+    //     // DOCKER_PASSWORD=credentials('DOCKER_PASSWORD')
+    // }
+
+    stages {
+        stage('Build') { 
+            steps {
+                // docker build -t jpk912/jenkins-test . 
+                retry(3) {
+                    sh '''#!/bin/bash
+                    echo "Building image..."
+                    
+                ''' 
+                }
+                timeout(time: 300, unit:'SECONDS'){
+                    sh 'sleep 10'
+                }
+            }
+        }
+        stage('Test') { 
+            steps {
+                // 
+                sh '''#!/bin/bash
+                    echo "no test scripts"
+                ''' 
+            }
+        }
+        stage('Deploy') { 
+            steps {
+                retry(3) {// echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+                //docker push jpk912/jenkins-test-repo
+                //log in and push to docker hub
+                sh '''#!/bin/bash
+                    echo "deploying........"
+                '''
+                }
+            }
+        }
+    }
+}
+
+node {    
+
+    environment {
+        dockerImage = ''
+        registry = 'jpk912/appointment2'
+        //import docker hub credentials
+        //REGISTRY_CREDENTIAL = credentials('DOCKER_ID')
+    }
+      //def app     
+      stage('Clone repository') {               
+            
+            checkout scm
+      }     
+      stage('Build image') {    
+            sh ''' #!/bin/bash
+                echo "Building apache...."
+            '''
+            website = docker.build("jpk912/appointment2-jenkins-apache-aws", "-f nginx/Dockerfile .")
+       }     
+      stage('Test image') {           
+            sh '''
+                echo "Tests would go here dfjiaj...."
+            '''  
+        }     
+       stage('Push image') {
+
+           //push to docker-hub
+            docker.withRegistry('https://registry.hub.docker.com', 'DOCKER_ID') {            
+                website.push("${env.BUILD_NUMBER}")            
+                website.push("latest")        
+            }   
+            
+        }
+}
