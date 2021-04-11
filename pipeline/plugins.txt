@@ -16,3 +16,4 @@ workflow-api:latest
 workflow-scm-step:latest
 matrix-auth:latest
 job-dsl:latest
+workflow-aggregator:latest
