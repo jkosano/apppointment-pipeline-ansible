@@ -3,6 +3,9 @@
 pipelineJob('mypipeline') {
     description('creates a pipeline to allow user to build docker images on commit changes')
 
+    def projecturl = 'jkosano/apppointment-pipeline-ansible'
+    def repofull = 'https://github.com/jkosano/apppointment-pipeline-ansible'
+
     //configure jenkins job properties
     properties {
         pipelineTriggers {
@@ -14,32 +17,26 @@ pipelineJob('mypipeline') {
     definition {
         //load pipeline script from scm 
         cpsScm {
+            // properties {
+            //     githubProjectUrl('https://github.com/jkosano/apppointment-pipeline-ansible')
+            // }
             scm {
                 git {
                     remote {
-                        github('jpk912/appointment-pipeline.git')
-                        credentials()
-                        //repository url
-                        url()
+                        //the github api auto fills with 'https://github.com/ <url-here>'
+                        github(projecturl)
+                        // credentials()
+                        url(repofull)
                     }
-                    branches{
-                        '*/master'
-                    }
+                    branches('*/master')
+                    browser{}
                 }
             }
             //Set the relative location of the pipeline script within the source code repository. Defaults to 'Jenkinsfile'.
             //scriptPath('$PWD/appointment.groovy')
-            scriptPath('roles/jenkins/files/jenkins-pipeline/pipeline/Jenkinsfile')
+            scriptPath('./pipeline/Jenkinsfile')
 
-            lightweight(boolean lightweight = true)        }
-
-        //
-        configure {
-            it / 'triggers' << 'com.cloudbees.jenkins.GitHubPushTrigger'{
-                spec''
-            }
-            scm('')
-                        }
+            lightweight(true)        
         }
-
+    }
 }
