@@ -17,3 +17,6 @@ workflow-scm-step:latest
 matrix-auth:latest
 job-dsl:latest
 workflow-aggregator:latest
+docker-plugin:latest
+docker-workflow:latest
+docker-java-api:latest
