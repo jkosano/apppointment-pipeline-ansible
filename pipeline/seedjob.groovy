@@ -3,8 +3,11 @@
 pipelineJob('mypipeline') {
     description('creates a pipeline to allow user to build docker images on commit changes')
 
-    def projecturl = 'jkosano/apppointment-pipeline-ansible'
-    def repofull = 'https://github.com/jkosano/apppointment-pipeline-ansible'
+    // def projecturl = 'jkosano/apppointment-pipeline-ansible'
+    // def repofull = 'https://github.com/jkosano/apppointment-pipeline-ansible'
+
+    def projecturl = 'jkosano/apppointment-pipeline-app'
+    def repofull = 'https://github.com/jkosano/apppointment-pipeline-app'
 
     //configure jenkins job properties
     properties {
@@ -34,7 +37,7 @@ pipelineJob('mypipeline') {
             }
             //Set the relative location of the pipeline script within the source code repository. Defaults to 'Jenkinsfile'.
             //scriptPath('$PWD/appointment.groovy')
-            scriptPath('./pipeline/Jenkinsfile')
+            scriptPath('Jenkinsfile')
 
             lightweight(true)        
         }
